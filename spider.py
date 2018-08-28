@@ -9,7 +9,8 @@ import UrlManager
 import Downloader
 import threading
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+from urllib.parse import urljoin,urlparse
+
 
 class main(object):
     def __init__(self,root,threadNum):
@@ -20,6 +21,8 @@ class main(object):
         
 
     def _judge(self,domain,url):
+        par_domain = urlparse(domain)
+        domain = par_domain.netloc+par_domain.path
         if url.find(domain) != -1:
             return True
         return False
@@ -37,8 +40,11 @@ class main(object):
         for link in links:
             new_url = link.get('href')
             new_full_url =urljoin(page_url,new_url)
+            #如果要指定初始网址为一级域名，则增加该条件。
             if (self._judge(self.root,new_full_url)):
                 new_urls.add(new_full_url)
+            #爬取所有域名
+            #new_urls.add(new_full_url)
         return new_urls
     
     def craw(self):
@@ -52,16 +58,18 @@ class main(object):
                 new_url = self.urls.get_new_url()
                 
                 print("craw:"+ new_url)
+ 
                 t = threading.Thread(target=self.download.download,args=(new_url,_content))
                 t.start()
                 th.append(t)
             for t in th :
                 t.join()
+            
             for _str in _content:
                 if _str is None:
                     continue
                 new_urls = self._parse(new_url,_str["html"])
                 self.urls.add_new_urls(new_urls)
             
-m = main('',1)
+m = main('https://www.baidu.com/',1)
 m.craw()

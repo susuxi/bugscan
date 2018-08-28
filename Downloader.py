@@ -12,12 +12,12 @@ class Downloader(object):
         r = requests.get(url,timeout=10)
         if r.status_code != 200:
             return None
-        _str = r.txt
+        _str = r.text
         return _str
     
     def post(self,url,data):
         r = requests.post(url,data)
-        _str = r.txt
+        _str = r.text
         return _str
     
     #用于多线程下载
@@ -30,8 +30,9 @@ class Downloader(object):
             r = requests.get(url,timeout=10)
             if r.status_code != 200:
                 return None
-            _str["html"] = r.txt
+            _str["html"] = r.text
         except Exception as e:
             return None
         htmls.append(_str)
+       
         
