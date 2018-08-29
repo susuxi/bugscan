@@ -31,7 +31,7 @@ def sqlcheck(url):
         if re.search(regex,_content):
             return True
         content = {}
-        content["origin"] = requests.get(_url).text
+        content["origin"] = requests.get(url).text
         for test_payload in BOOLEAN_TESTS:
             
             RANDINT = random.randint(1,255)

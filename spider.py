@@ -4,13 +4,16 @@ Created on Sun Aug 26 23:24:34 2018
 
 @author: susan
 """
+import sys
+sys.path.append("..")
 
 import UrlManager
 import Downloader
 import threading
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin,urlparse
-import sqlcheck
+from scripts import sqlcheck
+import plugin
 
 class main(object):
     def __init__(self,root,threadNum):
@@ -57,10 +60,11 @@ class main(object):
                     break
                 new_url = self.urls.get_new_url()
                 
+                
+                #sqlcheck
                 try:
                     if sqlcheck.sqlcheck(new_url):
                         print("url:%s sqlcheck is valueable"%new_url)
-                
                 except:
                     pass
                 
@@ -77,7 +81,16 @@ class main(object):
                 if _str is None:
                     continue
                 new_urls = self._parse(new_url,_str["html"])
+                
+                #plugin
+                disallow = ["sqlcheck"]
+                _plugin = plugin.spiderplus("scripts",disallow)
+                _plugin.work(_str["url"],_str["html"])
+                
+                
                 self.urls.add_new_urls(new_urls)
             
+                
+                
 m = main('https://blog.csdn.net/oxuzhenyi/article/details/72763486',1)
 m.craw()

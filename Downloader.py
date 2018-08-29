@@ -33,6 +33,6 @@ class Downloader(object):
             _str["html"] = r.text
         except Exception as e:
             return None
-        htmls.append(_str)
+        htmls.append(_str) 
        
         
