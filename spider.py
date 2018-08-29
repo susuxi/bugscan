@@ -10,7 +10,7 @@ import Downloader
 import threading
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin,urlparse
-
+import sqlcheck
 
 class main(object):
     def __init__(self,root,threadNum):
@@ -22,7 +22,7 @@ class main(object):
 
     def _judge(self,domain,url):
         par_domain = urlparse(domain)
-        domain = par_domain.netloc+par_domain.path
+        domain = par_domain.netloc +par_domain.path
         if url.find(domain) != -1:
             return True
         return False
@@ -57,6 +57,14 @@ class main(object):
                     break
                 new_url = self.urls.get_new_url()
                 
+                try:
+                    if sqlcheck.sqlcheck(new_url):
+                        print("url:%s sqlcheck is valueable"%new_url)
+                
+                except:
+                    pass
+                
+                
                 print("craw:"+ new_url)
  
                 t = threading.Thread(target=self.download.download,args=(new_url,_content))
@@ -71,5 +79,5 @@ class main(object):
                 new_urls = self._parse(new_url,_str["html"])
                 self.urls.add_new_urls(new_urls)
             
-m = main('https://www.baidu.com/',1)
+m = main('https://blog.csdn.net/oxuzhenyi/article/details/72763486',1)
 m.craw()
