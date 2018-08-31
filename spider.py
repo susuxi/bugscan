@@ -44,10 +44,10 @@ class main(object):
             new_url = link.get('href')
             new_full_url =urljoin(page_url,new_url)
             #如果要指定初始网址为一级域名，则增加该条件。
-            if (self._judge(self.root,new_full_url)):
-                new_urls.add(new_full_url)
+            #if (self._judge(self.root,new_full_url)):
+            #    new_urls.add(new_full_url)
             #爬取所有域名
-            #new_urls.add(new_full_url)
+            new_urls.add(new_full_url)
         return new_urls
     
     def craw(self):
@@ -62,11 +62,11 @@ class main(object):
                 
                 
                 #sqlcheck
-                try:
-                    if sqlcheck.sqlcheck(new_url):
-                        print("url:%s sqlcheck is valueable"%new_url)
-                except:
-                    pass
+#                try:
+#                    if sqlcheck.sqlcheck(new_url):
+#                        print("url:%s sqlcheck is valueable"%new_url)
+#                except:
+#                    pass
                 
                 
                 print("craw:"+ new_url)
@@ -83,7 +83,7 @@ class main(object):
                 new_urls = self._parse(new_url,_str["html"])
                 
                 #plugin
-                disallow = ["sqlcheck"]
+                disallow = ["sqlcheck","email_check","xss_check"]
                 _plugin = plugin.spiderplus("scripts",disallow)
                 _plugin.work(_str["url"],_str["html"])
                 
@@ -92,5 +92,5 @@ class main(object):
             
                 
                 
-m = main('https://blog.csdn.net/oxuzhenyi/article/details/72763486',1)
+m = main('http://www.hnsjjt.com/index.php',1)
 m.craw()
