@@ -23,7 +23,7 @@ for i in f:
 
 class spider:
     def run (self,url,html):
-        if not _url.endswith(".php"):
+        if not url.endswith(".php"):
             return False
         print("[webshell check]:",url)
         post_data = {}
